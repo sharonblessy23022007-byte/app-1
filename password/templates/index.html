@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Password Generator</h1>
+
+    <input type="number" id="length" placeholder="Enter length">
+
+    <div>
+        <label><input type="checkbox" id="letters"> Letters</label>
+        <label><input type="checkbox" id="numbers"> Numbers</label>
+        <label><input type="checkbox" id="symbols"> Symbols</label>
+    </div>
+
+    <button onclick="generatePassword()">Generate</button>
+
+    <h3 id="result"></h3>
+</div>
+
+<script>
+function generatePassword() {
+    const length = document.getElementById("length").value;
+    const letters = document.getElementById("letters").checked;
+    const numbers = document.getElementById("numbers").checked;
+    const symbols = document.getElementById("symbols").checked;
+
+    fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ length, letters, numbers, symbols })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("result").innerText = data.password;
+    });
+}
+</script>
+
+</body>
+</html>
